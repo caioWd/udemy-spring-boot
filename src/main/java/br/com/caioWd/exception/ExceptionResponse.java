@@ -1,4 +1,4 @@
-package br.com.caioWd.execption;
+package br.com.caioWd.exception;
 
 import java.util.Date;
 
