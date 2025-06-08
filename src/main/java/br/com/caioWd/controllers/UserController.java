@@ -1,6 +1,6 @@
 package br.com.caioWd.controllers;
 
-import br.com.caioWd.models.User;
+import br.com.caioWd.data.dto.UserDTO;
 import br.com.caioWd.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -17,22 +17,22 @@ public class UserController {
     private UserService service;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<User> getUsers(){
+    public List<UserDTO> getUsers(){
         return service.findAll();
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public User getUseById(@PathVariable Long id){
+    public UserDTO getUseById(@PathVariable Long id){
         return service.findById(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public User createUser(@RequestBody User user){
+    public UserDTO createUser(@RequestBody UserDTO user){
         return service.create(user);
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public User updateUser(@RequestBody User user){
+    public UserDTO updateUser(@RequestBody UserDTO user){
         return service.update(user);
     }
 

@@ -1,6 +1,9 @@
 package br.com.caioWd.services;
 
+import br.com.caioWd.data.dto.UserDTO;
 import br.com.caioWd.exception.ResourceNotFoundException;
+import static br.com.caioWd.mapper.ObjectMapper.parseListObjects;
+import static br.com.caioWd.mapper.ObjectMapper.parseObject;
 import br.com.caioWd.models.User;
 import br.com.caioWd.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,23 +20,30 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
-    public List<User> findAll(){
+    public List<UserDTO> findAll(){
         logger.info("Finding users!");
-        return repository.findAll();
+
+        return parseListObjects(repository.findAll(), UserDTO.class);
     }
 
-    public User findById(Long id){
+    public UserDTO findById(Long id){
         logger.info("Finding user!");
-        return repository.findById(id)
+
+        var entity = repository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("No records found for this Id"));
+
+        return parseObject(entity, UserDTO.class);
     }
 
-    public User create(User user){
+    public UserDTO create(UserDTO user){
         logger.info("Creating user!");
-        return repository.save(user);
+
+        var entity = parseObject(user, User.class);
+
+        return parseObject(repository.save(entity), UserDTO.class);
     }
 
-    public User update(User user){
+    public UserDTO update(UserDTO user){
         logger.info("Updating user!");
         User entity = repository.findById(user.getId())
                 .orElseThrow(()-> new ResourceNotFoundException("No records found for this Id"));
@@ -43,7 +53,7 @@ public class UserService {
         entity.setAddress(user.getAddress());
         entity.setGender(user.getGender());
 
-        return repository.save(entity);
+        return parseObject(repository.save(entity), UserDTO.class);
     }
 
     public void delete(Long id){
